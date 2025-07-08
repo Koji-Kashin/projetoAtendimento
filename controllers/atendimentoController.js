@@ -7,8 +7,8 @@ class AtendimentoController {
       .catch((error) => res.status(400).json(error.message));
   }
   criar(req, res) {
-    const novoAtendimento = req.body;
-    console.log("REQ BODY:", novoAtendimento);
+    const novoAtendimento = req.query;
+    console.log("REQ QUERY:", novoAtendimento);
     const atendimento = atendimentoModel.criar(novoAtendimento);
     return atendimento
       .then((atendimentoCriado) => res.status(201).json(atendimentoCriado))
@@ -16,7 +16,7 @@ class AtendimentoController {
   }
   atualizar(req, res) {
     const { id } = req.params;
-    const atendimentoAtualizado = req.body
+    const atendimentoAtualizado = req.query
     const atendimento = atendimentoModel.atualizar(atendimentoAtualizado, id);
     return atendimento
       .then((resultAtendimentoAtualizado) => res.status(200).json(resultAtendimentoAtualizado)

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Controle de Atendimentos</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    tr:nth-child(even){background-color: #f2f2f2;}
+    th { background-color: #4CAF50; color: white; }
+    input { margin: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Atendimentos</h1>
+
+  <button onclick="carregar()">🔄 Atualizar Lista</button>
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Cliente</th>
+        <th>Serviço</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>Adicionar Novo Atendimento</h2>
+  <form id="formAdicionar">
+    <input name="DATA" placeholder="Data (YYYY-MM-DD)" required />
+    <input name="cliente" placeholder="Cliente" required />
+    <input name="servico" placeholder="Serviço" required />
+    <input name="status" placeholder="Status" required />
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <script>
+    const API_URL = "http://localhost:3000/atendimentos";
+
+    async function carregar() {
+      const resposta = await fetch(API_URL);
+      const dados = await resposta.json();
+
+      const tbody = document.querySelector("#tabela tbody");
+      tbody.innerHTML = "";
+      dados.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.id}</td>
+          <td>${item.DATA}</td>
+          <td>${item.cliente}</td>
+          <td>${item.servico}</td>
+          <td>${item.status}</td>
+          <td>
+            <button onclick="deletar(${item.id})">🗑️ Excluir</button>
+            <button onclick="editar(${item.id})">✏️ Editar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function deletar(id) {
+      if (confirm("Confirma a exclusão?")) {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        carregar();
+      }
+    }
+
+    function editar(id) {
+      const linha = [...document.querySelectorAll("#tabela tbody tr")].find(tr => tr.children[0].textContent == id);
+      const DATA = prompt("Data:", linha.children[1].textContent);
+      const cliente = prompt("Cliente:", linha.children[2].textContent);
+      const servico = prompt("Serviço:", linha.children[3].textContent);
+      const status = prompt("Status:", linha.children[4].textContent);
+
+      fetch(`http://localhost:3000/atendimento/${id}?DATA=${DATA}&cliente=${cliente}&servico=${servico}&status=${status}`, {
+        method: "PUT"
+      }).then(carregar);
+    }
+
+    document.getElementById("formAdicionar").addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const params = new URLSearchParams();
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
+      }
+      fetch(`${API_URL}?${params.toString()}`, { method: "POST" }).then(() => {
+        e.target.reset();
+        carregar();
+      });
+    });
+
+    carregar();
+  </script>
+</body>
+</html>
