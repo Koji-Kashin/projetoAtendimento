@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# Configs locais
+.env
+config/
+*.log
+
+# Dumps de banco que você não quer versionar
+# estou subindo o banco
+
+# Cache
+.nyc_output
+coverage/
+tmp/
+dist/
+
+# Sistema
+.DS_Store
+Thumbs.db

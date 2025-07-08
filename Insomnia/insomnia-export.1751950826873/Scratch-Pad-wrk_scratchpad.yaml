@@ -1,0 +1,91 @@
+type: collection.insomnia.rest/5.0
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1751914884874
+  modified: 1751914884874
+  description: ""
+collection:
+  - name: atendimentos
+    meta:
+      id: fld_6fcd856ae79c4e70af31df031d49c0a2
+      created: 1751914972806
+      modified: 1751916002144
+      sortKey: -1751914972806
+      description: ""
+    children:
+      - url: http://localhost:3000/atendimentos
+        name: New Request
+        meta:
+          id: req_f740b18054ff413cb7c6091d5f534894
+          created: 1751945387054
+          modified: 1751950358680
+          isPrivate: false
+          description: ""
+          sortKey: -1751945387054
+        method: GET
+        body:
+          mimeType: multipart/form-data
+          params:
+            - id: pair_0b2543d2a4314d078462116a9dd9c466
+              name: DATA
+              value: ""
+              description: ""
+              disabled: false
+            - id: pair_0355a3b8317d4d9384e7564b7ab9e41a
+              name: cliente
+              value: ""
+              description: ""
+              disabled: false
+            - id: pair_9bbd05be922a49c19f55a05748fc7241
+              name: servico
+              value: ""
+              description: ""
+              disabled: false
+            - id: pair_014b96fc2ffb46d9b1d62aa8902e6b68
+              name: status
+              value: realizado
+              description: ""
+              disabled: false
+        parameters:
+          - id: pair_bc2780eed92147b5a576ab772c0aed23
+            name: DATE
+            value: 2025-08-07
+            description: ""
+            disabled: false
+          - id: pair_3762870768df4e8b8c50a8614255dfe0
+            name: cliente
+            value: Franchesco Virgulino
+            description: ""
+            disabled: false
+          - id: pair_0a3b0939d21941a88a698b3f56eebd40
+            name: servico
+            value: Criptomineradores de minas
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.2.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1751914894452
+    modified: 1751914894452
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1751914894368
+    modified: 1751914894368
+    isPrivate: false
