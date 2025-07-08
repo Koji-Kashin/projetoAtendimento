@@ -1,51 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Controle de Atendimentos</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <h1>Agendamentos</h1>
-    <button onclick="carregar()">🔄 Atualizar Lista</button>
 
-    <div class="table-container">
-      <table id="tabela">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Data</th>
-            <th>Cliente</th>
-            <th>Serviço</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Controle de Atendimentos</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-    <h2>Adicionar Novo Agendamento</h2>
-    <form id="formAdicionar">
-      <input name="DATA" type="date" placeholder="Data" required />
-      <input name="cliente" placeholder="Cliente" required />
-      <input name="servico" placeholder="Serviço" required />
-      <input name="status" placeholder="Status" required />
-      <button type="submit">Adicionar</button>
-    </form>
+<body>
+  <h1>Agendamentos do Mago</h1>
+  <button onclick="carregar()">🔄 Atualizar Lista</button>
 
-    <script>
-      const API_URL = "http://localhost:3000/atendimentos";
+  <div class="table-container">
+    <table id="tabela">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Data</th>
+          <th>Cliente</th>
+          <th>Serviço</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-      async function carregar() {
-        const resposta = await fetch(API_URL);
-        const dados = await resposta.json();
+  <h2>Adicionar Novo Agendamento</h2>
+  <form id="formAdicionar">
+    <input name="DATA" type="date" placeholder="Data" required />
+    <input name="cliente" placeholder="Cliente" required />
+    <input name="servico" placeholder="Serviço" required />
+    <input name="status" placeholder="Status" required />
+    <button type="submit">Adicionar</button>
+  </form>
 
-        const tbody = document.querySelector("#tabela tbody");
-        tbody.innerHTML = "";
-        dados.forEach((item) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+  <script>
+    const API_URL = "http://localhost:3000/atendimentos";
+
+    async function carregar() {
+      const resposta = await fetch(API_URL);
+      const dados = await resposta.json();
+
+      const tbody = document.querySelector("#tabela tbody");
+      tbody.innerHTML = "";
+      dados.forEach((item) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
           <td>${item.id}</td>
           <td>${item.DATA.split('T')[0]}</td>
           <td>${item.cliente}</td>
@@ -56,52 +58,53 @@
             <button onclick="editar(${item.id})">✏️ Editar</button>
           </td>
         `;
-          tbody.appendChild(tr);
-        });
-      }
+        tbody.appendChild(tr);
+      });
+    }
 
-      async function deletar(id) {
-        if (confirm("Confirma a exclusão?")) {
-          await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-          carregar();
+    async function deletar(id) {
+      if (confirm("Confirma a exclusão?")) {
+        await fetch(`http://localhost:3000/atendimento/${id}`, { method: "DELETE" }); <!-- ALTERADO AQUI -->
+        carregar();
+      }
+    }
+
+    function editar(id) {
+      const linha = [...document.querySelectorAll("#tabela tbody tr")].find(
+        (tr) => tr.children[0].textContent == id
+      );
+      const DATA = prompt("Data:", linha.children[1].textContent);
+      const cliente = prompt("Cliente:", linha.children[2].textContent);
+      const servico = prompt("Serviço:", linha.children[3].textContent);
+      const status = prompt("Status:", linha.children[4].textContent);
+
+      fetch(
+        `http://localhost:3000/atendimento/${id}?DATA=${DATA}&cliente=${cliente}&servico=${servico}&status=${status}`,
+        {
+          method: "PUT",
         }
-      }
+      ).then(carregar);
+    }
 
-      function editar(id) {
-        const linha = [...document.querySelectorAll("#tabela tbody tr")].find(
-          (tr) => tr.children[0].textContent == id
+    document
+      .getElementById("formAdicionar")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const params = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+          params.append(key, value);
+        }
+        fetch(`${API_URL}?${params.toString()}`, { method: "POST" }).then(
+          () => {
+            e.target.reset();
+            carregar();
+          }
         );
-        const DATA = prompt("Data:", linha.children[1].textContent);
-        const cliente = prompt("Cliente:", linha.children[2].textContent);
-        const servico = prompt("Serviço:", linha.children[3].textContent);
-        const status = prompt("Status:", linha.children[4].textContent);
+      });
 
-        fetch(
-          `http://localhost:3000/atendimento/${id}?DATA=${DATA}&cliente=${cliente}&servico=${servico}&status=${status}`,
-          {
-            method: "PUT",
-          }
-        ).then(carregar);
-      }
+    carregar();
+  </script>
+</body>
 
-      document
-        .getElementById("formAdicionar")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
-          const formData = new FormData(e.target);
-          const params = new URLSearchParams();
-          for (const [key, value] of formData.entries()) {
-            params.append(key, value);
-          }
-          fetch(`${API_URL}?${params.toString()}`, { method: "POST" }).then(
-            () => {
-              e.target.reset();
-              carregar();
-            }
-          );
-        });
-
-      carregar();
-    </script>
-  </body>
 </html>

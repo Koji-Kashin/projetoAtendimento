@@ -31,7 +31,6 @@ class AtendimentoModel {
         const sql = "DELETE FROM atendimentos WHERE id = ?";
         return this.executaQuery(sql, id);
     }
-
 }
 
 module.exports = new AtendimentoModel();
