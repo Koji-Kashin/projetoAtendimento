@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 const config = require("config");
 const port = 3000;
-const appCustom = require("./config/apCustom");
+const appCustom = require("./config/appCustom");
 
 app.use(cors());
 app.use(express.static('frontEnd'));
