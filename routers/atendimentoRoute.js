@@ -8,8 +8,8 @@ router.get("/atendimentos", atendimentoController.buscar);
 
 router.post("/atendimentos", atendimentoController.criar);
 
-router.put("/atendimento/:id", atendimentoController.atualizar);
+router.put("/atendimentos/:id", atendimentoController.atualizar);
 
-router.delete("/atendimento/:id", atendimentoController.deletar);
+router.delete("/atendimentos/:id", atendimentoController.deletar);
 
 module.exports = router;

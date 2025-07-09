@@ -63,11 +63,11 @@
     }
 
     async function deletar(id) {
-      if (confirm("Confirma a exclusão?")) {
-        await fetch(`http://localhost:3000/atendimento/${id}`, { method: "DELETE" }); <!-- ALTERADO AQUI -->
-        carregar();
+        if (confirm("Confirma a exclusão?")) {
+          await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+          carregar();
+        }
       }
-    }
 
     function editar(id) {
       const linha = [...document.querySelectorAll("#tabela tbody tr")].find(
